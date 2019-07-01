@@ -52,12 +52,6 @@ class Snake():
 
         self.body.insert(0,new_segment)
 
-
-        previous_segment=self.body[-1]
-        for segment in reversed(self.body[2:-2]):
-            previous_segment[1]=segment[1]
-            previous_segment=segment
-
         
 
 
@@ -71,6 +65,7 @@ class Board():
         self.food=set()
         self.add_food()
         self.state="play"
+        self.score=0
 
     def add_food(self):
         x=random.randint(1,self.size[1]-1)
@@ -105,21 +100,32 @@ class Board():
             self.snake.add_Segment()
             self.food.pop()
             self.add_food()
+            self.score+=1
 
 
 
 
-def draw_Window(window,snake,foods):
+def draw_Window(window,game):
+    snake,foods=game.get_pieces()
     window.erase()
     window.border('|','|','-','-','/','\\','\\','/')
+    window.addstr(0,0,str(game.score))
     
     character='@'
-    window.addch(*snake[0][0],character)
-    for segment in snake[1:]:
+    previous_segment=snake[0]
+    window.addch(*previous_segment[0],character)
+    for segment in snake[2:]:
         if segment[1] in ('L','R'):
             character = '-'
         else:
             character = '|'
+        if(not previous_segment[1]==segment[1]):
+            if (previous_segment[1],segment[1]) in set([('L','D'),('U','R'),('R','U'),('D','L')]):
+                character='/'
+            else:
+                character='\\'
+        previous_segment=segment
+
         window.addch(*segment[0],character)
     for food in foods:
         character='X'
@@ -136,7 +142,7 @@ def main(stdscr):
 
     game=Board((size[0]-1,size[1]-1))
     while(game.state =="play"):
-        draw_Window(game_Window,*game.get_pieces())
+        draw_Window(game_Window,game)
         game_Window.refresh()
         sleep(.1)
         try:
