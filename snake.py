@@ -151,6 +151,12 @@ def main(stdscr):
             key=game.snake.body[0][1]
         game.step(key)
 
+    game_Window.erase()
+    message="score: "+str(game.score)
+    game_Window.addstr(int(size[0]/2),int((size[1]/2)-len(message)/2),message)
+    game_Window.refresh()
+    sleep(5)
+
 if __name__ == "__main__":
     curses.wrapper(main)
     
