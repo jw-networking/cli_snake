@@ -61,15 +61,24 @@ class Board():
     def __init__(self,size):
         random.seed()
         self.size=size
+        self.space=set((x,y) for x in range(1,self.size[1]) for y in range(1,self.size[0]))
         self.snake=Snake((int(size[0]/2),int(size[1]/2)))
         self.food=set()
         self.add_food()
         self.state="play"
         self.score=0
+        
 
     def add_food(self):
-        x=random.randint(1,self.size[1]-1)
-        y=random.randint(1,self.size[0]-1)
+        #x=random.randint(1,self.size[1]-1)
+        #y=random.randint(1,self.size[0]-1)
+        #while (x,y) in self.food or (x,y) in set(x[0] for x in self.snake.body):
+        #    x=random.randint(1,self.size[1]-1)
+        #    y=random.randint(1,self.size[0]-1)
+
+        free=self.space.difference(self.food.union(set(x[0] for x in self.snake.body)))
+        x,y=list(free)[random.randint(0,len(free)-1)]
+
         self.food.add((y,x))
 
     def get_pieces(self):
