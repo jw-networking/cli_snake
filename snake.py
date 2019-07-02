@@ -6,7 +6,7 @@ from time import sleep
 class Snake():
     def __init__(self,head,length=2,orientation='L'):
         self.length=length
-        self.body=[[head,orientation]]
+        self.body=[(head,orientation)]
         for i in range(length):
             self.add_Segment()
 
@@ -70,11 +70,6 @@ class Board():
         
 
     def add_food(self):
-        #x=random.randint(1,self.size[1]-1)
-        #y=random.randint(1,self.size[0]-1)
-        #while (x,y) in self.food or (x,y) in set(x[0] for x in self.snake.body):
-        #    x=random.randint(1,self.size[1]-1)
-        #    y=random.randint(1,self.size[0]-1)
 
         free=self.space.difference(self.food.union(set(x[0] for x in self.snake.body)))
         x,y=list(free)[random.randint(0,len(free)-1)]
